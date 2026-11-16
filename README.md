@@ -134,8 +134,3 @@ Students can import any standard flashcard or Q&A CSV file directly via the Reca
 6. Attempt to log in with an incorrect password and confirm a 401 error message displays cleanly.
 7. Test the password reset workflow.
 
----
-
-## License
-
-Recallia is proprietary software. All rights reserved.
