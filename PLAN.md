@@ -4,8 +4,8 @@
 > **Product Tagline:** *Learn it. Recall it. Remember it.*  
 > **Repository:** `recallia`  
 > **Status:** Active Implementation  
-> **Current Phase:** Completed Phase 3 (Feature 2: Courses, Enrollments & Topic Selection Engine)  
-> **Next Phase:** Phase 4 — Feature 3 (Flashcard Question Bank & Advanced CSV/JSON Import/Export)
+> **Current Phase:** Completed Phase 4 (Feature 3: Flashcard Question Bank & Advanced CSV/JSON Import/Export)  
+> **Next Phase:** Phase 5 — Feature 4 (Spaced-Repetition Review Experience & Interactive Study Session)
 
 ---
 
@@ -160,16 +160,17 @@ Recallia follows a strictly phased, feature-by-feature implementation workflow. 
 - [x] Standalone decks support (`decks` table and management UI).
 - [x] Manual verification of enrollment workflows and topic queue filtering (39/39 unit checks + 8 live HTTP tests passing).
 
-### Phase 4 — Feature 3: Flashcard Question Bank & Advanced CSV/JSON Import/Export (NEXT)
-- [ ] Interactive flashcard explorer with search, subject filter, topic filter, difficulty filter, and pagination.
-- [ ] Flashcard creation, editing, deletion, and tag management.
-- [ ] Bulk CSV import modal with column mapping, delimiter detection, preview table, validation error reporting, and duplicate detection.
-- [ ] CSV export (deck, subject, or course-level).
-- [ ] JSON backup export and restoration.
-- [ ] Ingestion of the 1,172 ARC Science cards into the primary catalog.
-- [ ] Manual verification of CSV parsing, validation, and export fidelity.
+### Phase 4 — Feature 3: Flashcard Question Bank & Advanced CSV/JSON Import/Export (COMPLETED)
+- [x] Interactive flashcard explorer with search, subject filter, topic filter, difficulty filter, and pagination.
+- [x] Flashcard creation, editing, deletion, and tag management.
+- [x] Card version history tracking (`card_versions` table and version history inspector).
+- [x] Bulk CSV import modal with column mapping, delimiter detection, preview table, validation error reporting, and duplicate detection.
+- [x] CSV export (deck, subject, or course-level) with 100% round-trip fidelity.
+- [x] JSON structured backup export and restoration with schema validation.
+- [x] Ingestion and exploration of the 1,172 ARC Science cards in the primary catalog.
+- [x] Manual verification of card CRUD, versioning, CSV parsing, validation, duplicate detection, and export fidelity (43/43 unit checks + 7 live HTTP tests passing).
 
-### Phase 5 — Feature 4: Spaced-Repetition Review Experience & Interactive Study Session
+### Phase 5 — Feature 4: Spaced-Repetition Review Experience & Interactive Study Session (NEXT)
 - [ ] Daily due-queue generator taking into account topic selections and due dates.
 - [ ] Distraction-free review interface with front/back card flip animation.
 - [ ] SM-2 response buttons: `Again` (1 min / reset), `Hard` (+1.2x), `Good` (SM-2 interval), `Easy` (+1.5x bonus).
@@ -257,10 +258,33 @@ Recallia follows a strictly phased, feature-by-feature implementation workflow. 
 
 ---
 
-### Next Incomplete Feature: Feature 3 (Flashcard Question Bank & Advanced CSV/JSON Import/Export)
+### Feature 3: Flashcard Question Bank & Advanced CSV/JSON Import/Export
+- **Status:** COMPLETED & VERIFIED
+- **Completion Date:** 2026-11-16
+- **Delivered Components:**
+  - `src/server/db.ts`: Added `card_versions` table and indexes.
+  - `src/server/cards/cardService.ts`: Card CRUD with search, subject/topic/difficulty filters, version history tracking, bulk import, export to CSV/JSON, and existing front retrieval for duplicate checking.
+  - `src/server/cards/cardRoutes.ts`: `/api/cards`, `/api/cards/:id`, `/api/cards/preview-csv`, `/api/cards/import`, `/api/cards/export/csv`, `/api/cards/export/json`, `/api/cards/restore/json`.
+  - `src/core/csv/csvParser.ts`: Delimiter detection (comma, semicolon, tab, pipe), column mapping suggestions, quote escaping, field validation, duplicate detection, and preview table generator.
+  - `src/core/csv/csvExporter.ts`: Round-trip compatible CSV serializer with proper field escaping.
+  - `src/core/csv/jsonBackup.ts`: Structured JSON backup creator and schema validator.
+  - `src/client/components/cards/FlashcardBrowser.tsx`: Interactive question bank explorer with search, subject/topic/difficulty filters, pagination, card detail with 3D flip animation, edit modal with version tracking, and create modal.
+  - `src/client/components/cards/ImportExportModal.tsx`: Advanced CSV import center with drag-and-drop, delimiter selector, live mapping dropdowns, preview table with validity badges, CSV/JSON export downloads, and JSON restore.
+  - `src/client/components/dashboard/StudentDashboard.tsx`: Added "Cards Bank" tab.
+- **Verification Results:**
+  - 43/43 manual verification checks passed (card creation, multi-version logging, search, delimiter detection, column mapping, dirty CSV validation, duplicate detection, bulk import, round-trip CSV export, structured JSON backup & validation).
+  - 7/7 live HTTP endpoints verified against active server.
+  - Production build compiled cleanly with Vite.
+- **Known Limitations:**
+  - Active study session review runner with SM-2 spaced repetition rating buttons (`Again`, `Hard`, `Good`, `Easy`) is the objective of Feature 4.
+
+---
+
+### Next Incomplete Feature: Feature 4 (Spaced-Repetition Review Experience & Interactive Study Session)
 - **Status:** Pending ("Continue" instruction)
 - **Planned Scope:**
-  - Flashcard management UI (create, edit, delete cards, front/back markdown, difficulty, tags).
-  - Bulk CSV import engine with delimiter detection, column mapping, validation, duplicate detection, and preview table.
-  - CSV export (deck, subject, or course-level).
-  - JSON structured backup export and restore.
+  - Active study session runner with SM-2 scheduling engine.
+  - Daily review queue generator (due cards + new cards) respecting topic toggles.
+  - Distraction-free review interface with front/back card flip animation and keyboard shortcuts (Space/Enter to flip, 1-4 for ratings).
+  - Rating responses: `Again` (1 min / reset to relearning), `Hard` (SM-2 * 1.2), `Good` (SM-2 standard), `Easy` (SM-2 * 1.3 bonus).
+  - Session progress bar, review velocity, and celebratory completion summary.

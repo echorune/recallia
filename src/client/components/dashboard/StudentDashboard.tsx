@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { CourseCatalog } from '../courses/CourseCatalog';
 import { TopicSelector } from '../courses/TopicSelector';
 import { StandaloneDecks } from '../courses/StandaloneDecks';
+import { FlashcardBrowser } from '../cards/FlashcardBrowser';
 import { 
   ShieldCheck, Key, Copy, Check, User, Clock, BookOpen, 
   Layers, CheckCircle, Award, Sparkles, Database, ArrowRight,
@@ -18,7 +19,7 @@ interface SubjectSummary {
   topics: Array<{ name: string; cardCount: number }>;
 }
 
-type DashboardTab = 'overview' | 'courses' | 'topics' | 'decks' | 'security';
+type DashboardTab = 'overview' | 'courses' | 'topics' | 'cards' | 'decks' | 'security';
 
 export const StudentDashboard: React.FC = () => {
   const { user, session, logout, resetPassword } = useAuth();
@@ -151,6 +152,16 @@ export const StudentDashboard: React.FC = () => {
               Topic Queue
             </button>
             <button
+              onClick={() => setActiveTab('cards')}
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'cards'
+                  ? 'bg-white text-brand-teal shadow-soft'
+                  : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              Cards Bank
+            </button>
+            <button
               onClick={() => setActiveTab('decks')}
               className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'decks'
@@ -182,6 +193,11 @@ export const StudentDashboard: React.FC = () => {
       {/* Tab: Topic Queue Controls */}
       {activeTab === 'topics' && (
         <TopicSelector courseId={selectedCourseId} />
+      )}
+
+      {/* Tab: Cards Bank Explorer */}
+      {activeTab === 'cards' && (
+        <FlashcardBrowser />
       )}
 
       {/* Tab: Standalone Decks */}
