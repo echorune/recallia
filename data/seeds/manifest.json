@@ -1,0 +1,156 @@
+{
+  "totalCards": 1172,
+  "course": {
+    "title": "General Science & Scientific Inquiry",
+    "code": "SCI-ARC",
+    "description": "Comprehensive multidisciplinary science question bank covering Biology, Physics, Earth Sciences, Chemistry, and Scientific Method."
+  },
+  "subjects": [
+    {
+      "name": "Biology & Life Sciences",
+      "slug": "biology-and-life-sciences",
+      "code": "BIO",
+      "color": "#0A9396",
+      "file": "biology-and-life-sciences.json",
+      "cardCount": 330,
+      "topics": [
+        {
+          "name": "Cell Biology & Genetics",
+          "slug": "cell-biology-and-genetics",
+          "description": "Prokaryotes vs eukaryotes, DNA, genes, protein synthesis, and cellular structures.",
+          "cardCount": 68
+        },
+        {
+          "name": "Plant Biology & Photosynthesis",
+          "slug": "plant-biology-and-photosynthesis",
+          "description": "Light reactions, chloroplasts, leaf anatomy, transpiration, and botanical reproduction.",
+          "cardCount": 99
+        },
+        {
+          "name": "Ecology & Ecosystems",
+          "slug": "ecology-and-ecosystems",
+          "description": "Food chains, trophic levels, adaptations, symbiosis, population dynamics, and biomes.",
+          "cardCount": 79
+        },
+        {
+          "name": "Human Body & Living Systems",
+          "slug": "human-body-and-living-systems",
+          "description": "Circulation, respiration, digestion, nerves, organs, and physiological homeostasis.",
+          "cardCount": 84
+        }
+      ]
+    },
+    {
+      "name": "Physics & Mechanics",
+      "slug": "physics-and-mechanics",
+      "code": "PHYS",
+      "color": "#0F4C5C",
+      "file": "physics-and-mechanics.json",
+      "cardCount": 275,
+      "topics": [
+        {
+          "name": "Forces, Motion & Dynamics",
+          "slug": "forces-motion-and-dynamics",
+          "description": "Newtonian mechanics, speed, acceleration, gravity, friction, and momentum.",
+          "cardCount": 86
+        },
+        {
+          "name": "Energy, Work & Heat",
+          "slug": "energy-work-and-heat",
+          "description": "Kinetic and potential energy, heat transfer, thermal dynamics, and energy conservation.",
+          "cardCount": 120
+        },
+        {
+          "name": "Electricity, Magnetism & Circuits",
+          "slug": "electricity-magnetism-and-circuits",
+          "description": "Current, voltage, series and parallel circuits, magnetic fields, and electromagnetism.",
+          "cardCount": 28
+        },
+        {
+          "name": "Waves, Light & Sound",
+          "slug": "waves-light-and-sound",
+          "description": "Wavelength, reflection, refraction, lenses, auditory vibrations, and the electromagnetic spectrum.",
+          "cardCount": 41
+        }
+      ]
+    },
+    {
+      "name": "Earth & Space Sciences",
+      "slug": "earth-and-space-sciences",
+      "code": "EARTH",
+      "color": "#CA6702",
+      "file": "earth-and-space-sciences.json",
+      "cardCount": 236,
+      "topics": [
+        {
+          "name": "Astronomy & Solar System",
+          "slug": "astronomy-and-solar-system",
+          "description": "Planetary orbits, lunar phases, meteorite impacts, stars, eclipses, and space exploration.",
+          "cardCount": 80
+        },
+        {
+          "name": "Geology, Rocks & Earth History",
+          "slug": "geology-rocks-and-earth-history",
+          "description": "Rock formation, mineral properties, plate tectonics, earthquakes, volcanoes, and the fossil record.",
+          "cardCount": 85
+        },
+        {
+          "name": "Weather, Atmosphere & Water Cycle",
+          "slug": "weather-atmosphere-and-water-cycle",
+          "description": "Troposphere and atmospheric layers, precipitation, cloud formation, and meteorological phenomena.",
+          "cardCount": 71
+        }
+      ]
+    },
+    {
+      "name": "Chemistry & Matter",
+      "slug": "chemistry-and-matter",
+      "code": "CHEM",
+      "color": "#9B2226",
+      "file": "chemistry-and-matter.json",
+      "cardCount": 164,
+      "topics": [
+        {
+          "name": "Atomic Structure & Elements",
+          "slug": "atomic-structure-and-elements",
+          "description": "Subatomic particles, electron shells, isotopes, and the periodic table of elements.",
+          "cardCount": 45
+        },
+        {
+          "name": "Chemical Reactions & Changes",
+          "slug": "chemical-reactions-and-changes",
+          "description": "Endothermic/exothermic reactions, conservation of mass, oxidation, acids, bases, and pH.",
+          "cardCount": 49
+        },
+        {
+          "name": "States & Properties of Matter",
+          "slug": "states-and-properties-of-matter",
+          "description": "Phase transitions, density, solubility, mixtures, physical properties, and solutions.",
+          "cardCount": 70
+        }
+      ]
+    },
+    {
+      "name": "Scientific Inquiry & Applied Science",
+      "slug": "scientific-inquiry-and-applied-science",
+      "code": "SCI",
+      "color": "#EE9B00",
+      "file": "scientific-inquiry-and-applied-science.json",
+      "cardCount": 167,
+      "topics": [
+        {
+          "name": "Scientific Method & Experiments",
+          "slug": "scientific-method-and-experiments",
+          "description": "Hypotheses, independent/dependent variables, controls, data analysis, and laboratory precision.",
+          "cardCount": 123
+        },
+        {
+          "name": "Engineering & Technology",
+          "slug": "engineering-and-technology",
+          "description": "Engineering design process, structural integrity, sustainable technology, and applied mechanics.",
+          "cardCount": 44
+        }
+      ]
+    }
+  ]
+}
