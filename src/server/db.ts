@@ -115,6 +115,27 @@ function initSchema(db: DatabaseSync): void {
       FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
     );
 
+    CREATE TABLE IF NOT EXISTS decks (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      course_id TEXT,
+      subject_id TEXT,
+      topic_id TEXT,
+      title TEXT NOT NULL,
+      description TEXT,
+      color TEXT DEFAULT '#0F4C5C',
+      is_standalone INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+      FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE SET NULL,
+      FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE SET NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_decks_user ON decks(user_id);
+    CREATE INDEX IF NOT EXISTS idx_decks_course ON decks(course_id);
+
     CREATE TABLE IF NOT EXISTS student_topic_preferences (
       id TEXT PRIMARY KEY,
       user_id TEXT NOT NULL,
@@ -132,6 +153,7 @@ function initSchema(db: DatabaseSync): void {
       course_id TEXT,
       subject_id TEXT,
       topic_id TEXT,
+      deck_id TEXT,
       original_id TEXT,
       front TEXT NOT NULL,
       back TEXT NOT NULL,
@@ -143,7 +165,8 @@ function initSchema(db: DatabaseSync): void {
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
       FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
       FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
-      FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
+      FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE,
+      FOREIGN KEY (deck_id) REFERENCES decks(id) ON DELETE SET NULL
     );
 
     CREATE INDEX IF NOT EXISTS idx_cards_subject ON cards(subject_id);
@@ -184,4 +207,16 @@ function initSchema(db: DatabaseSync): void {
 
     CREATE INDEX IF NOT EXISTS idx_review_logs_user_date ON review_logs(user_id, reviewed_at);
   `);
+
+  try {
+    db.exec('ALTER TABLE cards ADD COLUMN deck_id TEXT REFERENCES decks(id) ON DELETE SET NULL;');
+  } catch {
+    // column already exists
+  }
+
+  try {
+    db.exec('CREATE INDEX IF NOT EXISTS idx_cards_deck ON cards(deck_id);');
+  } catch {
+    // index creation ok
+  }
 }

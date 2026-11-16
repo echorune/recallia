@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { CourseCatalog } from '../courses/CourseCatalog';
+import { TopicSelector } from '../courses/TopicSelector';
+import { StandaloneDecks } from '../courses/StandaloneDecks';
 import { 
   ShieldCheck, Key, Copy, Check, User, Clock, BookOpen, 
   Layers, CheckCircle, Award, Sparkles, Database, ArrowRight,
-  Lock, RefreshCw, AlertCircle
+  Lock, RefreshCw, AlertCircle, FolderPlus
 } from 'lucide-react';
 
 interface SubjectSummary {
@@ -15,12 +18,15 @@ interface SubjectSummary {
   topics: Array<{ name: string; cardCount: number }>;
 }
 
+type DashboardTab = 'overview' | 'courses' | 'topics' | 'decks' | 'security';
+
 export const StudentDashboard: React.FC = () => {
   const { user, session, logout, resetPassword } = useAuth();
   const [copied, setCopied] = useState(false);
   const [subjects, setSubjects] = useState<SubjectSummary[]>([]);
   const [totalCards, setTotalCards] = useState<number>(0);
-  const [activeTab, setActiveTab] = useState<'overview' | 'security' | 'catalog'>('overview');
+  const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
+  const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined);
 
   // Change password modal / state
   const [newPassword, setNewPassword] = useState('');
@@ -66,7 +72,6 @@ export const StudentDashboard: React.FC = () => {
     setIsUpdatingPw(true);
     setPwMessage(null);
     try {
-      // In Feature 1, we test the reset workflow
       const res = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,6 +94,11 @@ export const StudentDashboard: React.FC = () => {
     }
   };
 
+  const navigateToTopics = (courseId?: string) => {
+    setSelectedCourseId(courseId);
+    setActiveTab('topics');
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
@@ -105,36 +115,81 @@ export const StudentDashboard: React.FC = () => {
               Welcome back, {user?.name}!
             </h1>
             <p className="mt-2 text-slate-100 max-w-2xl text-sm sm:text-base">
-              Your personalized learning environment is active. All flashcard reviews, scheduling states, and mastery streaks are securely isolated to your student account.
+              Your personalized learning environment is active. All course enrollments, topic selections, and review schedules are isolated to your account.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'overview'
                   ? 'bg-white text-brand-teal shadow-soft'
                   : 'bg-white/15 text-white hover:bg-white/25'
               }`}
             >
-              Learning Bank
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('courses')}
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'courses'
+                  ? 'bg-white text-brand-teal shadow-soft'
+                  : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              Courses
+            </button>
+            <button
+              onClick={() => setActiveTab('topics')}
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'topics'
+                  ? 'bg-white text-brand-teal shadow-soft'
+                  : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              Topic Queue
+            </button>
+            <button
+              onClick={() => setActiveTab('decks')}
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'decks'
+                  ? 'bg-white text-brand-teal shadow-soft'
+                  : 'bg-white/15 text-white hover:bg-white/25'
+              }`}
+            >
+              Decks
             </button>
             <button
               onClick={() => setActiveTab('security')}
-              className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
+              className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'security'
                   ? 'bg-white text-brand-teal shadow-soft'
                   : 'bg-white/15 text-white hover:bg-white/25'
               }`}
             >
-              Account Security
+              Security
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Content Areas */}
+      {/* Tab: Courses & Enrollments */}
+      {activeTab === 'courses' && (
+        <CourseCatalog onSelectCourse={navigateToTopics} />
+      )}
+
+      {/* Tab: Topic Queue Controls */}
+      {activeTab === 'topics' && (
+        <TopicSelector courseId={selectedCourseId} />
+      )}
+
+      {/* Tab: Standalone Decks */}
+      {activeTab === 'decks' && (
+        <StandaloneDecks />
+      )}
+
+      {/* Tab: Overview & Science Bank */}
       {activeTab === 'overview' && (
         <div className="space-y-8">
           
@@ -150,7 +205,7 @@ export const StudentDashboard: React.FC = () => {
               <div className="mt-4 text-3xl font-extrabold text-slate-900">
                 {totalCards || 1172}
               </div>
-              <p className="mt-1 text-xs text-slate-500">From verified ARC Science dataset</p>
+              <p className="mt-1 text-xs text-slate-500">From ARC Science dataset</p>
             </div>
 
             <div className="p-6 bg-white rounded-2xl border border-slate-200/80 shadow-soft">
@@ -205,9 +260,14 @@ export const StudentDashboard: React.FC = () => {
                   1,172 flashcard questions extracted, normalized, and categorized subject-wise into JSON seeds
                 </p>
               </div>
-              <span className="px-3 py-1 bg-brand-emerald/10 text-brand-emerald text-xs font-semibold rounded-full">
-                Preloaded & Enrolled
-              </span>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setActiveTab('topics')}
+                  className="px-3 py-1.5 bg-brand-emerald text-white text-xs font-bold rounded-xl hover:bg-teal-700 shadow-xs transition"
+                >
+                  Configure Topics
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -252,10 +312,13 @@ export const StudentDashboard: React.FC = () => {
                   </div>
 
                   <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
-                    <span className="text-xs text-brand-emerald font-semibold flex items-center space-x-1">
-                      <CheckCircle className="w-3.5 h-3.5" />
-                      <span>Ready for Daily Reviews</span>
-                    </span>
+                    <button
+                      onClick={() => setActiveTab('topics')}
+                      className="text-xs text-brand-teal font-bold hover:underline flex items-center space-x-1"
+                    >
+                      <span>Manage Topics</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -264,7 +327,7 @@ export const StudentDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Security Tab */}
+      {/* Tab: Security */}
       {activeTab === 'security' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           

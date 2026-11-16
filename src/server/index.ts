@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { getDb } from './db';
 import { authRouter } from './auth/authRoutes';
+import { courseRouter } from './courses/courseRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -54,6 +55,7 @@ app.get('/api/health', (req, res) => {
 
 // Mount Routes
 app.use('/api/auth', authRouter);
+app.use('/api/courses', courseRouter);
 
 // Serve static build assets if available
 const distPath = path.resolve(process.cwd(), 'dist');

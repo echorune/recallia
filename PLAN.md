@@ -4,8 +4,8 @@
 > **Product Tagline:** *Learn it. Recall it. Remember it.*  
 > **Repository:** `recallia`  
 > **Status:** Active Implementation  
-> **Current Phase:** Completed Phase 2 (Feature 1: Student Accounts, Authentication & Security Foundation)  
-> **Next Phase:** Phase 3 — Feature 2 (Courses, Enrollments & Topic Selection Engine)
+> **Current Phase:** Completed Phase 3 (Feature 2: Courses, Enrollments & Topic Selection Engine)  
+> **Next Phase:** Phase 4 — Feature 3 (Flashcard Question Bank & Advanced CSV/JSON Import/Export)
 
 ---
 
@@ -151,16 +151,16 @@ Recallia follows a strictly phased, feature-by-feature implementation workflow. 
 - [x] Polished, responsive authentication UI with tab switching, error callouts, and session persistence.
 - [x] Manual verification of all registration, login, logout, and password edge cases (25/25 automated manual tests passing).
 
-### Phase 3 — Feature 2: Courses, Enrollments & Topic Selection Engine (NEXT)
-- [ ] Course catalog management (create, view, edit courses).
-- [ ] Enrollment lifecycle management (`enrolled`, `paused`, `completed`, `withdrawn`).
-- [ ] Enrollment state transition validations preventing illegal transitions.
-- [ ] Subject & Topic hierarchy navigation.
-- [ ] Student topic selector allowing enabling/disabling topics for daily study without losing review history.
-- [ ] Standalone decks support.
-- [ ] Manual verification of enrollment workflows and topic queue filtering.
+### Phase 3 — Feature 2: Courses, Enrollments & Topic Selection Engine (COMPLETED)
+- [x] Course catalog management (create, view, edit courses).
+- [x] Enrollment lifecycle management (`enrolled`, `paused`, `completed`, `withdrawn`).
+- [x] Enrollment state transition validations preventing illegal transitions (EnrollmentStateMachine).
+- [x] Subject & Topic hierarchy navigation.
+- [x] Student topic selector allowing enabling/disabling topics for daily study without losing review history.
+- [x] Standalone decks support (`decks` table and management UI).
+- [x] Manual verification of enrollment workflows and topic queue filtering (39/39 unit checks + 8 live HTTP tests passing).
 
-### Phase 4 — Feature 3: Flashcard Question Bank & Advanced CSV/JSON Import/Export
+### Phase 4 — Feature 3: Flashcard Question Bank & Advanced CSV/JSON Import/Export (NEXT)
 - [ ] Interactive flashcard explorer with search, subject filter, topic filter, difficulty filter, and pagination.
 - [ ] Flashcard creation, editing, deletion, and tag management.
 - [ ] Bulk CSV import modal with column mapping, delimiter detection, preview table, validation error reporting, and duplicate detection.
@@ -235,11 +235,32 @@ Recallia follows a strictly phased, feature-by-feature implementation workflow. 
 
 ---
 
-### Next Incomplete Feature: Feature 2 (Courses, Enrollments & Topic Selection Engine)
+### Feature 2: Courses, Enrollments & Topic Selection Engine
+- **Status:** COMPLETED & VERIFIED
+- **Completion Date:** 2026-11-16
+- **Delivered Components:**
+  - `src/core/enrollment/stateMachine.ts`: Pure `EnrollmentStateMachine` implementing valid transitions (`enrolled` ⇄ `paused` → `completed` or `withdrawn`), rejection of invalid transitions, and transition action labeling.
+  - `src/core/enrollment/topicSelector.ts`: Pure `TopicSelector` with topic enabling/disabling logic and daily queue filtering (`filterCardsForQueue`), ensuring cards from disabled topics are excluded without touching review history.
+  - `src/server/db.ts`: Added `decks` table and `deck_id` foreign key on `cards` table with migrations.
+  - `src/server/courses/courseService.ts`: Course creation, course listing with enrollment status, course details with subjects and topics, enrollment status transitions, topic preference management, bulk subject topic toggling, and standalone deck CRUD.
+  - `src/server/courses/courseRoutes.ts`: `/api/courses`, `/api/courses/:id`, `/api/courses/:id/status`, `/api/courses/topics/:id/toggle`, `/api/courses/subjects/:id/toggle-all`, `/api/courses/decks/all`, `/api/courses/decks/new`.
+  - `src/client/components/courses/CourseCatalog.tsx`: Course catalog with interactive status badges (`enrolled`, `paused`, `completed`, `withdrawn`), state transition action buttons, and course creation modal.
+  - `src/client/components/courses/TopicSelector.tsx`: Hierarchical subject/topic navigator with toggle switches, bulk enable/disable buttons, and live review queue counter.
+  - `src/client/components/courses/StandaloneDecks.tsx`: Standalone deck management for quick revision cards outside of courses.
+  - `src/client/components/dashboard/StudentDashboard.tsx`: Integrated dashboard navigation tabs.
+- **Verification Results:**
+  - 39/39 manual verification checks passed (state machine rules, illegal transition errors, course creation, auto-enrollment, lifecycle transitions, review history preservation across status changes, topic toggling, queue filtering, standalone decks).
+  - 8/8 live HTTP endpoints verified against active server.
+  - Production build compiled cleanly with Vite.
+- **Known Limitations:**
+  - Direct flashcard browsing and bulk CSV file importing into specific decks is the objective of Feature 3.
+
+---
+
+### Next Incomplete Feature: Feature 3 (Flashcard Question Bank & Advanced CSV/JSON Import/Export)
 - **Status:** Pending ("Continue" instruction)
 - **Planned Scope:**
-  - Course catalog view with enrollment state transitions (`enrolled`, `paused`, `completed`, `withdrawn`).
-  - Validation engine preventing invalid state transitions while strictly preserving review history.
-  - Subject and topic exploration hierarchy.
-  - Student topic toggle interface allowing students to selectively include/exclude topics from daily reviews without data loss.
-  - Standalone deck support outside of courses.
+  - Flashcard management UI (create, edit, delete cards, front/back markdown, difficulty, tags).
+  - Bulk CSV import engine with delimiter detection, column mapping, validation, duplicate detection, and preview table.
+  - CSV export (deck, subject, or course-level).
+  - JSON structured backup export and restore.
